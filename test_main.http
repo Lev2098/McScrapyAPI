@@ -1,11 +1,31 @@
-# Test your FastAPI endpoints
+# 1. POST /parse-menu/
+POST http://127.0.0.1:8000/api/v1/products/parse-menu/?file_name=menu.json
+Content-Type: application/json
 
-GET http://127.0.0.1:8000/
+{
+  "file_name": "menu.json"
+}
+
+###
+
+# 2. GET /
+GET http://127.0.0.1:8000/api/v1/products/
 Accept: application/json
 
 ###
 
-GET http://127.0.0.1:8000/hello/User
+# 3. GET /{product_name}/
+GET http://127.0.0.1:8000/api/v1/products/%D0%9C%D0%B0%D0%BA%D0%A2%D0%BE%D1%81%D1%82%20%D1%96%D0%B7%20%D1%81%D0%B8%D1%80%D0%BE%D0%BC/
 Accept: application/json
 
 ###
+
+# 4. GET /id/{product_id}/
+GET 127.0.0.1:8000/api/v1/products/id/200010/
+Accept: application/json
+
+###
+
+# 5. GET /{product_name}/{product_field}/
+GET http://127.0.0.1:8000/api/v1/products/%D0%9C%D0%B0%D0%BA%D0%A2%D0%BE%D1%81%D1%82%20%D1%96%D0%B7%20%D1%81%D0%B8%D1%80%D0%BE%D0%BC/carbs/
+Accept: application/json

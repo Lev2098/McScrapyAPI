@@ -3,7 +3,7 @@ from pydantic import BaseModel, validator
 
 class UploadProductSchema(BaseModel):
     id: int
-    title: str
+    name: str
     description: str = "No description provided."
     calories: int = 0
     fats: float = 0.0
@@ -34,7 +34,7 @@ class UploadProductSchema(BaseModel):
 
 class ProductSchema(BaseModel):
     id: int
-    title: str
+    name: str
     description: str
     calories: int
     fats: float

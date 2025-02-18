@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.crud.crud import (
     add_products,
     get_products,
-    get_product_by_title,
+    get_product_by_name,
     get_product_by_id)
 from app.database.engine import SessionLocal
 
@@ -64,7 +64,7 @@ def get_all_products(db: Session = Depends(get_db)):
 @router.get("/{product_name}/")
 def get_product_by_name(product_name: str, db: Session = Depends(get_db)):
 
-    product = get_product_by_title(db=db, product_title=product_name)
+    product = get_product_by_name(db=db, product_name=product_name)
 
     if not product:
         raise HTTPException(
@@ -94,7 +94,7 @@ def get_product_field(
         db: Session = Depends(get_db)
 ):
     product = db.query(McProduct).filter(
-        McProduct.title == product_name).first()
+        McProduct.name == product_name).first()
 
     if not product:
         raise HTTPException(

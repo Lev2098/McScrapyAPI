@@ -18,7 +18,7 @@ def add_products(
             validated_product = UploadProductSchema(**item)
         except ValidationError as e:
             skipped_products.append(
-                f"Invalid product with ID: "
+                f"The product already exists ID: "
                 f"{item.get('id', 'unknown')}. Reason: {e.errors()}"
             )
             continue
@@ -27,12 +27,12 @@ def add_products(
             id=validated_product.id).first()
 
         if existing_product:
-            skipped_products.append(existing_product.title)
+            skipped_products.append(existing_product.name)
             continue
 
         new_product = McProduct(
             id=validated_product.id,
-            title=validated_product.name,
+            name=validated_product.name,
             description=validated_product.description,
             calories=validated_product.calories,
             fats=validated_product.fats,
@@ -44,7 +44,7 @@ def add_products(
             portion=validated_product.portion
         )
         db.add(new_product)
-        added_products.append(new_product.title)
+        added_products.append(new_product.name)
 
     db.commit()
 
@@ -58,8 +58,8 @@ def get_products(db: Session):
     return db.query(McProduct).all()
 
 
-def get_product_by_title(db: Session, product_title: str):
-    return db.query(McProduct).filter(McProduct.title == product_title).first()
+def get_product_by_name(db: Session, product_name: str):
+    return db.query(McProduct).filter(McProduct.name == product_name).first()
 
 
 def get_product_by_id(db: Session, product_id: int):
