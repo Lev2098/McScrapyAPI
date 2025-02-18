@@ -1,15 +1,14 @@
 from fastapi import FastAPI
 
-from app.routers.product import router
+from app.routers import product
 
 app = FastAPI(
     title="McScraperAPI",
     description="Scrape and api",
-    docs_url="/docs",
-    redoc_url="/redoc"
 )
 
 api_version_prefix = "/api/v1"
 
-app.include_router(router=router, prefix=f"{api_version_prefix}/products", tags=["products"])
-
+app.include_router(
+    product.router, prefix=f"{api_version_prefix}/products", tags=["products"]
+)

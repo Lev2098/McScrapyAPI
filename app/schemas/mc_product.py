@@ -1,5 +1,4 @@
-from pydantic import BaseModel, Field, validator
-from typing import Optional, Union, Any
+from pydantic import BaseModel, validator
 
 
 class UploadProductSchema(BaseModel):
@@ -15,7 +14,17 @@ class UploadProductSchema(BaseModel):
     salt: float = 0.0
     portion: int = 0
 
-    @validator("calories", "fats", "carbs", "proteins", "unsaturated_fats", "sugar", "salt", pre=True, always=True)
+    @validator(
+        "calories",
+        "fats",
+        "carbs",
+        "proteins",
+        "unsaturated_fats",
+        "sugar",
+        "salt",
+        pre=True,
+        always=True
+    )
     def validate_numeric_fields(cls, value):
         try:
             return float(value) if "." in str(value) else int(value)

@@ -17,15 +17,18 @@ def add_products(
         try:
             validated_product = UploadProductSchema(**item)
         except ValidationError as e:
-            skipped_products.append(f"Invalid product with ID: {item.get('id', 'unknown')}. Reason: {e.errors()}")
+            skipped_products.append(
+                f"Invalid product with ID: "
+                f"{item.get('id', 'unknown')}. Reason: {e.errors()}"
+            )
             continue
 
-        existing_product = db.query(McProduct).filter_by(id=validated_product.id).first()
+        existing_product = db.query(McProduct).filter_by(
+            id=validated_product.id).first()
 
         if existing_product:
             skipped_products.append(existing_product.title)
             continue
-
 
         new_product = McProduct(
             id=validated_product.id,
@@ -50,5 +53,14 @@ def add_products(
         "skipped": skipped_products
     }
 
+
 def get_products(db: Session):
     return db.query(McProduct).all()
+
+
+def get_product_by_title(db: Session, product_title: str):
+    return db.query(McProduct).filter(McProduct.title == product_title).first()
+
+
+def get_product_by_id(db: Session, product_id: int):
+    return db.query(McProduct).filter(McProduct.id == product_id).first()

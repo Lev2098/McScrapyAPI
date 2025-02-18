@@ -1,10 +1,9 @@
 from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy.orm import relationship
 from app.database.engine import Base
 
 
 class McProduct(Base):
-    __tablename__ = 'mc_product'
+    __tablename__ = "mc_product"
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)

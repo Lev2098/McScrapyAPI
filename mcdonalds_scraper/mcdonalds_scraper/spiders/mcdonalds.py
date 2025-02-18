@@ -27,24 +27,31 @@ from scrapy.http import Response
 
 
 class McDonaldsLinkSpider(scrapy.Spider):
-    name = 'mcdonalds'
+    name = "mcdonalds"
     allowed_domains = ["www.mcdonalds.com"]
     start_urls = ["https://www.mcdonalds.com/ua/uk-ua/eat/fullmenu.html"]
 
     def parse(self, response: Response, **kwargs):
 
-        product_elements = response.css("li.cmp-category__item[data-product-id]")
+        product_elements = response.css(
+            "li.cmp-category__item[data-product-id]")
 
         product_ids = product_elements.css("::attr(data-product-id)").getall()
 
         self.log(f"Found {len(product_ids)} items: {product_ids}")
 
         for product_id in product_ids:
-            api_url = f"https://www.mcdonalds.com/dnaapp/itemDetails?country=UA&language=uk&showLiveData=true&item={product_id}"
-            yield scrapy.Request(api_url, callback=self.parse_item, meta={"product_id": product_id})
+            api_url = (f"https://www.mcdonalds.com/dnaapp/itemDetails?"
+                       f"country=UA&language=uk&showLiveData=true&item="
+                       f"{product_id}")
+            yield scrapy.Request(
+                api_url,
+                callback=self.parse_item,
+                meta={"product_id": product_id}
+            )
 
     def parse_item(self, response):
-        description = "N/A"
+        description = ""
         try:
             product_data = response.json()
             item_data = product_data.get("item", {})
@@ -60,7 +67,7 @@ class McDonaldsLinkSpider(scrapy.Spider):
             if not isinstance(item_data.get("description", "N/A"), str):
                 description = "N/A"
             else:
-                description = item_data.get("description", "N/A")
+                description = item_data.get("description")
             yield {
                 "id": response.meta["product_id"],
                 "name": item_data.get("item_name", "N/A"),
@@ -75,4 +82,5 @@ class McDonaldsLinkSpider(scrapy.Spider):
                 "portion": get_nutrient_value("Вага порції")
             }
         except Exception as e:
-            self.log(f"Product processing error: {response.meta['product_id']}. Detail: {e}")
+            self.log(f"Product processing error: "
+                     f"{response.meta['product_id']}. Detail: {e}")

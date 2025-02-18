@@ -1,0 +1,9 @@
+[flake8]
+   inline-quotes = "
+   multiline-quotes = "
+   docstring-quotes = """
+   exclude =
+        .venv
+        venv
+        .\alembic\
+   ignore = E265, VNE003, N805
